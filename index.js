@@ -1,4 +1,5 @@
 const { encode, correct } = require('./utils/reed-solomon')
+const QRCode = require('qrcode')
 
 async function main() {
 // const str = await QRCode.toFile('./test.png', "https://google.com");
@@ -32,6 +33,12 @@ const corrected = correct(encoded, [])
 console.log('corrected', corrected)
 const textCorrected = corrected.map(charCode => String.fromCharCode(charCode)).join('')
 console.error('textCorrected', textCorrected.slice(0, initialLength))
+
+QRCode.toFile(
+  `test.png`,
+  [{ data: Buffer.from(encoded), mode: 'byte' }],
+  {errorCorrectionLevel: 'M'}
+)
 }
 
 main().then(() => console.log('DONE')).catch(err => {
